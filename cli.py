@@ -90,11 +90,7 @@ def make_korg_sample(filename, import_num, category="User", name=None):
         esli.OSC_name = bytes(os.path.splitext(os.path.basename(filename))[0], 'ascii', 'ignore')
     if category in e2s.esli_str_to_OSC_cat:
         esli.OSC_category = e2s.esli_str_to_OSC_cat[category]
-    esli.OSC_0index = import_num
-    if esli.OSC_0index < 500:
-        esli.OSC_importNum = SampleAllEditor.factory_importNums[esli.OSC_0index - 18]
-    else:
-        esli.OSC_importNum = 550 + esli.OSC_0index - 500
+    esli.OSC_0index = import_num -1
 
     return sample.get_clean_copy()
 
@@ -110,7 +106,7 @@ def from_e2s(input_e2s_file, output_dir):
                                                 e2s.esli_OSC_cat_to_str[esli.OSC_category],
                                                 esli.OSC_name.decode('ascii', 'ignore').split('\x00')[0])
         with open(filename, 'wb') as f:
-            sample.write(f)
+            sample.write(f, export_smpl=True, export_cue=True)
 
 
 def to_e2s(input_dir, output_e2s_file):
